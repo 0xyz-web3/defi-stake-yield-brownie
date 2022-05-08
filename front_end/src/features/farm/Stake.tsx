@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react"
-import { SliderInput } from "../../components"
-import { useEthers, useTokenBalance, useNotifications } from "@usedapp/core"
-import { formatUnits } from "@ethersproject/units"
+import React, { useEffect, useState } from 'react'
+import { SliderInput } from '../../components'
+import { useEthers, useTokenBalance, useNotifications } from '@usedapp/core'
+import { formatUnits } from '@ethersproject/units'
 import {
   Button,
   CircularProgress,
   Snackbar,
   makeStyles,
-} from "@material-ui/core"
-import { Token } from "../Main"
-import { useStakeTokens } from "../../hooks"
-import { utils } from "ethers"
-import Alert from "@material-ui/lab/Alert"
-import "../../App.css"
+} from '@material-ui/core'
+import { Token } from '../Main'
+import { useStakeTokens } from '../../hooks'
+import { utils } from 'ethers'
+import Alert from '@material-ui/lab/Alert'
+import '../../App.css'
 
 // This is the typescript way of saying this compent needs this type
 export interface StakeFormProps {
@@ -21,22 +21,22 @@ export interface StakeFormProps {
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
     gap: theme.spacing(2),
-    width: "100%",
+    width: '100%',
   },
   slider: {
-    width: "100%",
-    maxWidth: "400px",
+    width: '100%',
+    maxWidth: '400px',
   },
 }))
 
 // token is getting passed in as a prop
-// in the ping brackets is an object/variable 
+// in the ping brackets is an object/variable
 // That object is of the shape StakeFormProps
-export const StakeForm = ({ token }: StakeFormProps) => {
+export const Stake = ({ token }: StakeFormProps) => {
   const { address: tokenAddress, name } = token
 
   const { account } = useEthers()
@@ -45,8 +45,9 @@ export const StakeForm = ({ token }: StakeFormProps) => {
 
   const classes = useStyles()
 
-  const { send: stakeTokensSend, state: stakeTokensState } =
-    useStakeTokens(tokenAddress)
+  const { send: stakeTokensSend, state: stakeTokensState } = useStakeTokens(
+    tokenAddress,
+  )
 
   const formattedTokenBalance: number = tokenBalance
     ? parseFloat(formatUnits(tokenBalance, 18))
@@ -57,11 +58,13 @@ export const StakeForm = ({ token }: StakeFormProps) => {
     return stakeTokensSend(amountAsWei.toString())
   }
 
-  const [amount, setAmount] =
-    useState<number | string | Array<number | string>>(0)
+  const [amount, setAmount] = useState<
+    number | string | Array<number | string>
+  >(0)
 
-  const [showErc20ApprovalSuccess, setShowErc20ApprovalSuccess] =
-    useState(false)
+  const [showErc20ApprovalSuccess, setShowErc20ApprovalSuccess] = useState(
+    false,
+  )
   const [showStakeTokensSuccess, setShowStakeTokensSuccess] = useState(false)
 
   const handleCloseSnack = () => {
@@ -73,8 +76,8 @@ export const StakeForm = ({ token }: StakeFormProps) => {
     if (
       notifications.filter(
         (notification) =>
-          notification.type === "transactionSucceed" &&
-          notification.transactionName === "Approve ERC20 transfer"
+          notification.type === 'transactionSucceed' &&
+          notification.transactionName === 'Approve ERC20 transfer',
       ).length > 0
     ) {
       !showErc20ApprovalSuccess && setShowErc20ApprovalSuccess(true)
@@ -84,8 +87,8 @@ export const StakeForm = ({ token }: StakeFormProps) => {
     if (
       notifications.filter(
         (notification) =>
-          notification.type === "transactionSucceed" &&
-          notification.transactionName === "Stake tokens"
+          notification.type === 'transactionSucceed' &&
+          notification.transactionName === 'Stake tokens',
       ).length > 0
     ) {
       showErc20ApprovalSuccess && setShowErc20ApprovalSuccess(false)
@@ -93,7 +96,7 @@ export const StakeForm = ({ token }: StakeFormProps) => {
     }
   }, [notifications, showErc20ApprovalSuccess, showStakeTokensSuccess])
 
-  const isMining = stakeTokensState.status === "Mining"
+  const isMining = stakeTokensState.status === 'Mining'
 
   const hasZeroBalance = formattedTokenBalance === 0
   const hasZeroAmountSelected = parseFloat(amount.toString()) === 0
@@ -117,7 +120,7 @@ export const StakeForm = ({ token }: StakeFormProps) => {
           onClick={handleStakeSubmit}
           disabled={isMining || hasZeroAmountSelected}
         >
-          {isMining ? <CircularProgress size={26} /> : "Stake"}
+          {isMining ? <CircularProgress size={26} /> : 'Stake'}
         </Button>
       </div>
       <Snackbar

@@ -4,11 +4,9 @@ import React, { useEffect, useState } from 'react'
 import eth from '../eth.png'
 import dapp from '../dapp.png'
 import dai from '../dai.png'
-import { YourWallet } from './yourWallet'
-import { TokenFarmContract } from './tokenFarmContract'
+import { TokenFarmContract } from './farm'
 import { useEthers } from '@usedapp/core'
 import { constants } from 'ethers'
-import DappToken from '../chain-info/contracts/DappToken.json'
 import { Snackbar, Typography, makeStyles } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
 import networkMapping from '../chain-info/deployments/map.json'
@@ -111,8 +109,10 @@ export const Main = () => {
       >
         Dapp Token Farm
       </Typography>
-      <YourWallet supportedTokens={supportedTokens} />
-      <TokenFarmContract supportedTokens={supportedTokens} />
+      {supportedTokens.map((token, index) => {
+        return <TokenFarmContract token={supportedTokens[index]} />
+      })}
+
       <Snackbar
         open={showNetworkError}
         autoHideDuration={5000}
